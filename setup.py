@@ -15,11 +15,11 @@ if sys.version_info < (2, 6):
     install_requires.append("simplejson >= 3.3.0")
 
 setup(
-    name='pydruid',
+    name='sugo_pydruid',
     version='0.3.1',
     author='Druid Developers',
     author_email='druid-development@googlegroups.com',
-    packages=['pydruid', 'pydruid.utils'],
+    packages=['sugo_pydruid', 'sugo_pydruid.utils'],
     url='https://pypi.python.org/pypi/pydruid/',
     license='Apache License, Version 2.0',
     description='A Python connector for Druid.',

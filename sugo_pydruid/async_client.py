@@ -18,7 +18,7 @@ from __future__ import division
 from __future__ import absolute_import
 
 import json
-from pydruid.client import BaseDruidClient
+from sugo_pydruid.client import BaseDruidClient
 
 try:
     from tornado import gen

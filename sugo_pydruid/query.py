@@ -17,12 +17,12 @@
 import six
 import json
 import collections
-from pydruid.utils.aggregators import build_aggregators
-from pydruid.utils.filters import Filter
-from pydruid.utils.having import Having
-from pydruid.utils.dimensions import build_dimension
-from pydruid.utils.postaggregator import Postaggregator
-from pydruid.utils.query_utils import UnicodeWriter
+from sugo_pydruid.utils.aggregators import build_aggregators
+from sugo_pydruid.utils.filters import Filter
+from sugo_pydruid.utils.having import Having
+from sugo_pydruid.utils.dimensions import build_dimension
+from sugo_pydruid.utils.postaggregator import Postaggregator
+from sugo_pydruid.utils.query_utils import UnicodeWriter
 
 
 class Query(collections.MutableSequence):
@@ -89,13 +89,13 @@ class Query(collections.MutableSequence):
             f = open(dest_path, 'wb')
         w = UnicodeWriter(f)
 
-        if self.query_type == "timeseries":
+        if self.query_type == "lucene_timeseries":
             header = list(self.result[0]['result'].keys())
             header.append('timestamp')
-        elif self.query_type == 'topN':
+        elif self.query_type == 'lucene_topN':
             header = list(self.result[0]['result'][0].keys())
             header.append('timestamp')
-        elif self.query_type == "groupBy":
+        elif self.query_type == "lucene_groupBy":
             header = list(self.result[0]['event'].keys())
             header.append('timestamp')
             header.append('version')
@@ -105,7 +105,7 @@ class Query(collections.MutableSequence):
         w.writerow(header)
 
         if self.result:
-            if self.query_type == "topN" or self.query_type == "timeseries":
+            if self.query_type == "lucene_topN" or self.query_type == "lucene_timeseries":
                 for item in self.result:
                     timestamp = item['timestamp']
                     result = item['result']
@@ -114,7 +114,7 @@ class Query(collections.MutableSequence):
                             w.writerow(list(line.values()) + [timestamp])
                     else:  # timeseries
                         w.writerow(list(result.values()) + [timestamp])
-            elif self.query_type == "groupBy":
+            elif self.query_type == "lucene_groupBy":
                 for item in self.result:
                     timestamp = item['timestamp']
                     version = item['version']
@@ -156,11 +156,11 @@ class Query(collections.MutableSequence):
         import pandas
 
         if self.result:
-            if self.query_type == "timeseries":
+            if self.query_type == "lucene_timeseries":
                 nres = [list(v['result'].items()) + [('timestamp', v['timestamp'])]
                         for v in self.result]
                 nres = [dict(v) for v in nres]
-            elif self.query_type == "topN":
+            elif self.query_type == "lucene_topN":
                 nres = []
                 for item in self.result:
                     timestamp = item['timestamp']
@@ -168,7 +168,7 @@ class Query(collections.MutableSequence):
                     tres = [dict(list(res.items()) + [('timestamp', timestamp)])
                             for res in results]
                     nres += tres
-            elif self.query_type == "groupBy":
+            elif self.query_type == "lucene_groupBy":
                 nres = [list(v['event'].items()) + [('timestamp', v['timestamp'])]
                         for v in self.result]
                 nres = [dict(v) for v in nres]
@@ -271,7 +271,7 @@ class QueryBuilder(object):
         :return: topn query
         :rtype: Query
         """
-        query_type = 'topN'
+        query_type = 'lucene_topN'
         valid_parts = [
             'datasource', 'granularity', 'filter', 'aggregations',
             'post_aggregations', 'intervals', 'dimension', 'threshold',
@@ -289,7 +289,7 @@ class QueryBuilder(object):
         :return: timeseries query
         :rtype: Query
         """
-        query_type = 'timeseries'
+        query_type = 'lucene_timeseries'
         valid_parts = [
             'datasource', 'granularity', 'filter', 'aggregations', 'descending',
             'post_aggregations', 'intervals'
@@ -306,7 +306,7 @@ class QueryBuilder(object):
         :return: group by query
         :rtype: Query
         """
-        query_type = 'groupBy'
+        query_type = 'lucene_groupBy'
         valid_parts = [
             'datasource', 'granularity', 'filter', 'aggregations',
             'having', 'post_aggregations', 'intervals', 'dimensions',
@@ -328,7 +328,7 @@ class QueryBuilder(object):
         :return: segment metadata query
         :rtype: Query
         """
-        query_type = 'segmentMetadata'
+        query_type = 'lucene_segmentMetadata'
         valid_parts = ['datasource', 'intervals', 'analysisTypes', 'merge']
         self.validate_query(query_type, valid_parts, args)
         return self.build_query(query_type, args)
@@ -342,7 +342,7 @@ class QueryBuilder(object):
         :return: time boundary query
         :rtype: Query
         """
-        query_type = 'timeBoundary'
+        query_type = 'lucene_timeBoundary'
         valid_parts = ['datasource']
         self.validate_query(query_type, valid_parts, args)
         return self.build_query(query_type, args)
@@ -356,7 +356,7 @@ class QueryBuilder(object):
         :return: select query
         :rtype: Query
         """
-        query_type = 'select'
+        query_type = 'lucene_select'
         valid_parts = [
             'datasource', 'granularity', 'filter', 'dimensions', 'metrics',
             'paging_spec', 'intervals'
@@ -373,7 +373,7 @@ class QueryBuilder(object):
         :return: search query
         :rtype: Query
         """
-        query_type = 'search'
+        query_type = 'lucene_search'
         valid_parts = [
             'datasource', 'granularity', 'filter', 'searchDimensions', 'query',
             'limit', 'intervals', 'sort'

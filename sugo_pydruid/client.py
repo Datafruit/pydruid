@@ -21,7 +21,7 @@ import sys
 
 from six.moves import urllib
 
-from pydruid.query import QueryBuilder
+from sugo_pydruid.query import QueryBuilder
 
 
 class BaseDruidClient(object):
