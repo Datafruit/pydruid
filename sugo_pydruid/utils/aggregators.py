@@ -19,42 +19,50 @@ from .filters import Filter
 
 
 def longsum(raw_metric):
-    return {"type": "longSum", "fieldName": raw_metric}
+    return {"type": "lucene_longSum", "fieldName": raw_metric}
 
 
 def doublesum(raw_metric):
-    return {"type": "doubleSum", "fieldName": raw_metric}
+    return {"type": "lucene_doubleSum", "fieldName": raw_metric}
 
 
-def min(raw_metric):
-    return {"type": "min", "fieldName": raw_metric}
+def longmin(raw_metric):
+    return {"type": "lucene_longMin", "fieldName": raw_metric}
 
 
-def max(raw_metric):
-    return {"type": "max", "fieldName": raw_metric}
+def longmax(raw_metric):
+    return {"type": "lucene_longMax", "fieldName": raw_metric}
 
 
-def count(raw_metric):
-    return {"type": "count", "fieldName": raw_metric}
+def doublemin(raw_metric):
+    return {"type": "lucene_doubleMin", "fieldName": raw_metric}
+
+
+def doublemax(raw_metric):
+    return {"type": "lucene_doubleMax", "fieldName": raw_metric}
+
+
+def count():
+    return {"type": "lucene_count"}
 
 
 def hyperunique(raw_metric):
-    return {"type": "hyperUnique", "fieldName": raw_metric}
+    return {"type": "lucene_hyperUnique", "fieldName": raw_metric}
 
 
 def cardinality(raw_column, by_row=False):
     if type(raw_column) is not list:
         raw_column = [raw_column]
-    return {"type": "cardinality", "fieldNames": raw_column, "byRow": by_row}
+    return {"type": "lucene_cardinality", "fieldNames": raw_column, "byRow": by_row}
 
 
 def filtered(filter, agg):
-    return {"type": "filtered",
+    return {"type": "lucene_filtered",
             "filter": Filter.build_filter(filter),
             "aggregator": agg}
 
 def javascript(columns_list, fn_aggregate, fn_combine, fn_reset):
-    return {"type": "javascript",
+    return {"type": "lucene_javascript",
             "fieldNames": columns_list,
             "fnAggregate":fn_aggregate,
             "fnCombine":fn_combine,
@@ -66,7 +74,7 @@ def build_aggregators(agg_input):
 
 
 def _build_aggregator(name, kwargs):
-    if kwargs["type"] == "filtered":
+    if kwargs["type"] == "lucene_filtered":
         kwargs["aggregator"] = _build_aggregator(name, kwargs["aggregator"])
     else:
         kwargs.update({"name": name})
