@@ -172,6 +172,9 @@ class Query(collections.MutableSequence):
                 nres = [list(v['event'].items()) + [('timestamp', v['timestamp'])]
                         for v in self.result]
                 nres = [dict(v) for v in nres]
+            elif self.query_type == "lucene_select":
+                nres = [v['event'] for r in self.result for v in r['result']['events']]
+                nres = [dict(v) for v in nres]
             else:
                 raise NotImplementedError('Pandas export not implemented for query type: {0}'.format(self.query_type))
 
