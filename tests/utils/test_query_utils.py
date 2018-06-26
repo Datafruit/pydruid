@@ -2,7 +2,7 @@
 
 import os
 from six import PY3
-from pydruid.utils import query_utils
+from sugo_pydruid.utils import query_utils
 
 
 def open_file(file_path):

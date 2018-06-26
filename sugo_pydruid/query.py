@@ -173,8 +173,13 @@ class Query(collections.MutableSequence):
                         for v in self.result]
                 nres = [dict(v) for v in nres]
             elif self.query_type == "lucene_select":
-                nres = [v['event'] for r in self.result for v in r['result']['events']]
-                nres = [dict(v) for v in nres]
+                nres = []
+                for item in self.result:
+                    nres += [e.get('event') for e in item['result'].get('events')]
+            elif self.query_type == "lucene_scan":
+                nres = []
+                for item in self.result:
+                    nres += [e for e in item.get('events')]
             else:
                 raise NotImplementedError('Pandas export not implemented for query type: {0}'.format(self.query_type))
 
@@ -182,7 +187,7 @@ class Query(collections.MutableSequence):
             return df
 
     def __str__(self):
-        return self.result
+        return str(self.result)
 
     def __len__(self):
         return len(self.result)
@@ -243,6 +248,8 @@ class QueryBuilder(object):
                 query_dict[key] = build_aggregators(val)
             elif key == 'post_aggregations':
                 query_dict['postAggregations'] = Postaggregator.build_post_aggregators(val)
+            elif key == 'context':
+                query_dict['context'] = val
             elif key == 'datasource':
                 query_dict['dataSource'] = val
             elif key == 'paging_spec':
@@ -380,6 +387,23 @@ class QueryBuilder(object):
         valid_parts = [
             'datasource', 'granularity', 'filter', 'searchDimensions', 'query',
             'limit', 'intervals', 'sort'
+        ]
+        self.validate_query(query_type, valid_parts, args)
+        return self.build_query(query_type, args)
+
+    def scan(self, args):
+        """
+        A scan query returns raw Druid rows
+
+        :param dict args: dict of args
+
+        :return: select query
+        :rtype: Query
+        """
+        query_type = 'lucene_scan'
+        valid_parts = [
+            'datasource', 'granularity', 'filter', 'columns',
+            'intervals', 'limit',
         ]
         self.validate_query(query_type, valid_parts, args)
         return self.build_query(query_type, args)

@@ -17,22 +17,20 @@ from six import iteritems
 
 from .filters import Filter
 
+def thetasketch(raw_column, isinputthetasketch = False, size = 16384):
+    return {"type": "lucene_thetaSketch", "fieldName": raw_column, "isInputThetaSketch": isinputthetasketch, "size": size}
 
 def longsum(raw_metric):
     return {"type": "lucene_longSum", "fieldName": raw_metric}
 
-
-def doublesum(raw_metric):
-    return {"type": "lucene_doubleSum", "fieldName": raw_metric}
-
-
 def longmin(raw_metric):
     return {"type": "lucene_longMin", "fieldName": raw_metric}
-
 
 def longmax(raw_metric):
     return {"type": "lucene_longMax", "fieldName": raw_metric}
 
+def doublesum(raw_metric):
+    return {"type": "lucene_doubleSum", "fieldName": raw_metric}
 
 def doublemin(raw_metric):
     return {"type": "lucene_doubleMin", "fieldName": raw_metric}

@@ -2,7 +2,7 @@
 
 import pytest
 
-from pydruid.utils import filters
+from sugo_pydruid.utils import filters
 
 
 class TestDimension:

@@ -3,9 +3,9 @@ import pytest
 from mock import patch, Mock
 from six.moves import urllib
 
-from pydruid.client import PyDruid
-from pydruid.utils.aggregators import doublesum
-from pydruid.utils.filters import Dimension
+from sugo_pydruid.client import PyDruid
+from sugo_pydruid.utils.aggregators import doublesum
+from sugo_pydruid.utils.filters import Dimension
 
 
 def create_client():

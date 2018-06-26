@@ -18,8 +18,8 @@
 import pytest
 
 from mock import Mock
-from pydruid.utils.aggregators import doublesum
-from pydruid.utils.filters import Dimension
+from sugo_pydruid.utils.aggregators import doublesum
+from sugo_pydruid.utils.filters import Dimension
 
 try:
     import tornado
@@ -27,7 +27,7 @@ try:
     import tornado.web
     from tornado.testing import AsyncHTTPTestCase
     from tornado.httpclient import HTTPError
-    from pydruid.async_client import AsyncPyDruid
+    from sugo_pydruid.async_client import AsyncPyDruid
 except ImportError:
     tornado = Mock()
     AsyncHTTPTestCase = object

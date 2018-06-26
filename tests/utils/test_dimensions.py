@@ -1,11 +1,11 @@
-from pydruid.utils.dimensions import RegexExtraction
-from pydruid.utils.dimensions import PartialExtraction
-from pydruid.utils.dimensions import JavascriptExtraction
-from pydruid.utils.dimensions import TimeFormatExtraction
-from pydruid.utils.dimensions import MapLookupExtraction
-from pydruid.utils.dimensions import NamespaceLookupExtraction
-from pydruid.utils.dimensions import DimensionSpec
-from pydruid.utils.dimensions import build_dimension
+from sugo_pydruid.utils.dimensions import RegexExtraction
+from sugo_pydruid.utils.dimensions import PartialExtraction
+from sugo_pydruid.utils.dimensions import JavascriptExtraction
+from sugo_pydruid.utils.dimensions import TimeFormatExtraction
+from sugo_pydruid.utils.dimensions import MapLookupExtraction
+from sugo_pydruid.utils.dimensions import NamespaceLookupExtraction
+from sugo_pydruid.utils.dimensions import DimensionSpec
+from sugo_pydruid.utils.dimensions import build_dimension
 
 
 class TestDimensionSpec(object):

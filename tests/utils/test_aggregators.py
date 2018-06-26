@@ -3,8 +3,8 @@
 from operator import itemgetter
 from copy import deepcopy
 
-from pydruid.utils import aggregators
-from pydruid.utils import filters
+from sugo_pydruid.utils import aggregators
+from sugo_pydruid.utils import filters
 
 
 class TestAggregators:
